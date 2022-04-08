@@ -15,20 +15,64 @@ const corsOptionsDelegate = function (req, callback) {
     }
     callback(null, corsOptions) // callback expects two parameters: error and options
 }
+const responseSessionData = (session_data, res)=>{
+    if (!session_data) {
+        res.status(403).json({
+            error: 1,
+
+        });
+    } else
+        res.json({
+            error: 0,
+            session_data
+        });
+}
 app.options('*', cors());
 app.use(json());
+
+app.use((req, res, next)=>{
+    let token = null;
+    if (req.headers['authorization'])
+        [_, token] = req.headers['authorization'].split(" ");
+
+
+    req.token = token;
+    next();
+});
 app.post('/api/auth', cors(corsOptionsDelegate), (req, res) => {
     const {user_name, password} = req.body;
-    if (!user_name || !password){
+    if (!user_name || !password) {
         res.status(404).json({error: 1, description: 'Не достаточно данных'});
     }
 
 
-    const session_token = Auth(user_name , password);
+    const session_data = Auth.authentication(user_name, password);
+    responseSessionData(session_data, res);
+
+});
+app.post('/api/auth/logout', cors(corsOptionsDelegate), (req, res) => {
+    if (req.token)
+        Auth.logout(req.token);
+    responseSessionData({token: req.token}, res);
+});
+
+app.get('/api/get-report', cors(corsOptionsDelegate), (req, res) => {
+    if (!req.token)
+        responseSessionData(null, res);
     res.json({
         error: 0,
-        session_token
-    });
+    })
+    console.log(req.query);
+})
+
+app.post('/api/auth/refresh', cors(corsOptionsDelegate), (req, res) => {
+    const {token, refresh_token} = req.body;
+
+    if (!token || !refresh_token) {
+        res.status(404).json({error: 1, description: 'Не достаточно данных'});
+    }
+    const session_data = Auth.refreshToken(token, refresh_token);
+    responseSessionData(session_data, res);
 })
 
 app.listen(port, () => {
