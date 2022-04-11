@@ -5,9 +5,9 @@ const fs = require("fs");
 const dataServer = 'https://corp.lovisnami.ru:39876'
 
 const httpsAgent = new https.Agent({
-    ca: fs.readFileSync("data/keys/root.pem"),
-    cert: fs.readFileSync("data/keys/dunaev-server.crt"),
-    key: fs.readFileSync("data/keys/dunaev-server.key"),
+    ca: fs.readFileSync("data/keys/cs_auth/root.pem"),
+    cert: fs.readFileSync("data//keys/cs_auth/dunaev-server.crt"),
+    key: fs.readFileSync("data/keys/cs_auth/dunaev-server.key"),
 })
 
 

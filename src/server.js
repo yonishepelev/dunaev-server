@@ -84,6 +84,9 @@ app.get('/api/get-doc', cors(corsOptionsDelegate), (req, res) => {
             });
     })
 })
+app.get('/hello', (req, res)=>{
+    res.send('hello world!');
+})
 
 app.post('/api/auth/refresh', cors(corsOptionsDelegate), (req, res) => {
     const {token, refresh_token} = req.body;
@@ -95,6 +98,12 @@ app.post('/api/auth/refresh', cors(corsOptionsDelegate), (req, res) => {
     responseSessionData(session_data, res);
 })
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
+})
+process.on('SIGTERM', () => {
+    server.close(() => {
+        console.log('Http server closed.');
+    });
+    console.info('SIGTERM signal received.');
 })

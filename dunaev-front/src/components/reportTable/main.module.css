@@ -1,0 +1,23 @@
+.reportTable {
+
+}
+.reportTable thead th {
+    vertical-align: baseline;
+}
+.reportTable .headerCenter {
+    text-align: center;
+}
+.reportTable .contractorName {
+    font-size: larger;
+    font-weight: 600;
+}
+.reportTable .documentRow {
+    font-size: small;
+}
+.reportTable .link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.reportTable .link:hover {
+    color: #1d63ff;
+}
