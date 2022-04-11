@@ -13,7 +13,7 @@ export const Doc = () => {
 
 
     useEffect(() => {
-        document.title = 'Документ';
+        document.title = 'Рыбачок::Документ';
         getDoc(doc_type_id, doc_id).then(({error, data}) => {
             if (error !== 0) {
                 setError(1);
@@ -24,17 +24,26 @@ export const Doc = () => {
 
         })
     }, []);
+    useEffect(() => {
+        if (docData) {
+            const {doc_head, doc_name} = docData;
+            const {date, number} = doc_head;
+            const doc_title = `${doc_name} №${number} от ${formatDateFromSql(date)}`;
+            document.title = 'Рыбачок::' + doc_title;
+        }
+    }, [docData])
 
     if (error)
         return <Alert className={'mt-5'} variant={'danger'}>Ошибка при получении документа</Alert>
     if (error === 0 && docData) {
         const {doc_head, doc_name, doc_items} = docData;
         const {date, number, stores} = doc_head;
+
         console.log(doc_head)
         return (
             <Container className={'pt-5'}>
                 <h3>{doc_name} №{number} от {formatDateFromSql(date)}</h3>
-                <h5>{stores ? `на склад ${stores}`: ''}</h5>
+                <h5>{stores ? `на склад ${stores}` : ''}</h5>
                 <Table striped>
                     <thead>
                     <tr>
@@ -52,7 +61,7 @@ export const Doc = () => {
                                 <td>{line}</td>
                                 <td>{item_name}</td>
                                 <td>{count}</td>
-                                <td>{count !== 0 ? sum/count: ''}</td>
+                                <td>{count !== 0 ? sum / count : ''}</td>
                                 <td>{sum}</td>
                             </tr>
                         )

@@ -8,7 +8,7 @@ export const ReportMain = () => {
     const [reportData, setReportData] = useState(null);
 
     useEffect(() => {
-        document.title = 'Доступ к взаиморасчетам ТД Дунаев';
+        document.title = 'Рыбачок::Доступ к взаиморасчетам ТД Дунаев';
     }, []);
     const logOut = (e)=>{
         e.preventDefault();

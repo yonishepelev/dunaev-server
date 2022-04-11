@@ -31,8 +31,7 @@ const ReportTableDoc = ({doc,  debtOnStart}) => {
                     const url = new URL(
                         window.location.href + `get_doc?doc_type_id=${doc_type_id}&doc_id=${id}`
                     );
-
-                    console.log(url.href);
+                    window.open(url.href, '_blank').focus();
                 }}>{doc_type_name} №{number}
                     от {formatDateFromSql(date)}
                     &nbsp;{stores ? 'на склады ' + stores : ''}

@@ -1,5 +1,5 @@
 import {Button, Container, Form} from "react-bootstrap";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {auth} from "../../lib/api";
 
 
@@ -13,6 +13,9 @@ export const Login = () => {
         })
 
     }
+    useEffect(() => {
+        document.title = 'Рыбачок::Авторизация';
+    }, []);
 
     return <Container className={'d-flex justify-content-center vh-100'}>
         <Form.Group className={'mt-5 col-3'}>
