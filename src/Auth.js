@@ -65,7 +65,7 @@ class Auth {
 
     refreshToken(token, refresh_token) {
         const data = getAuthSession(token);
-        console.log(token, data);
+
         if (!data)
             return false;
         const {rt_valid_till, refresh_token: old_refresh_token, user_name} = data;

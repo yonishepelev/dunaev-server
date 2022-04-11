@@ -4,6 +4,7 @@ const port = 4000;
 const cors = require('cors')
 const {json} = require("express");
 const {Auth} = require("./Auth");
+const {getReport, getDoc} = require("./CS_Api");
 
 const allowList = ['http://localhost:3000'];
 const corsOptionsDelegate = function (req, callback) {
@@ -15,7 +16,7 @@ const corsOptionsDelegate = function (req, callback) {
     }
     callback(null, corsOptions) // callback expects two parameters: error and options
 }
-const responseSessionData = (session_data, res)=>{
+const responseSessionData = (session_data, res) => {
     if (!session_data) {
         res.status(403).json({
             error: 1,
@@ -30,7 +31,7 @@ const responseSessionData = (session_data, res)=>{
 app.options('*', cors());
 app.use(json());
 
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
     let token = null;
     if (req.headers['authorization'])
         [_, token] = req.headers['authorization'].split(" ");
@@ -59,10 +60,29 @@ app.post('/api/auth/logout', cors(corsOptionsDelegate), (req, res) => {
 app.get('/api/get-report', cors(corsOptionsDelegate), (req, res) => {
     if (!req.token)
         responseSessionData(null, res);
-    res.json({
-        error: 0,
+    const {date_from: dateFrom, date_to: dateTo} = req.query;
+    getReport(dateFrom, dateTo).then(data => {
+        res.json({
+            error: 0,
+            data
+        })
     })
-    console.log(req.query);
+})
+app.get('/api/get-doc', cors(corsOptionsDelegate), (req, res) => {
+    if (!req.token)
+        responseSessionData(null, res);
+    const {doc_type_id, doc_id} = req.query;
+    getDoc(doc_type_id, doc_id).then(data => {
+        if (data)
+            res.json({
+                error: 0,
+                data
+            })
+        else
+            res.status(400).json({
+                error: 1,
+            });
+    })
 })
 
 app.post('/api/auth/refresh', cors(corsOptionsDelegate), (req, res) => {
