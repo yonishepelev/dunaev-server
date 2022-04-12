@@ -1,0 +1,11 @@
+version: "3"
+services:
+  dunaev-server:
+    image: devnew.lovisnami.ru:39878/dunaev-server
+    container_name: dunaev-server
+    restart: always
+    ports:
+       - "8080:4000"
+       - "8443:4443"
+    volumes:
+      - ./ssl:/home/node/app/ssl
